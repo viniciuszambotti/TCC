@@ -3,14 +3,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
-    <artifactId>simple-service-webapp</artifactId>
+    <groupId>tcc.back</groupId>
+    <artifactId>tcc-back</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>simple-service-webapp</name>
 
     <build>
-        <finalName>simple-service-webapp</finalName>
+        <finalName>tcc-back</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
