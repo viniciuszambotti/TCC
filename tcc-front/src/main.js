@@ -6,7 +6,10 @@ import router from './router'
 import 'vue-material/dist/vue-material.css'
 
 var VueMaterial = require('vue-material')
+var Axios = require('axios')
+
 Vue.use(VueMaterial)
+Vue.use(Axios)
 
 Vue.config.productionTip = false
 

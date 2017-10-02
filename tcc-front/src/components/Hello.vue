@@ -15,7 +15,7 @@
 
           <md-card-actions>
             <!-- <md-button>Atualizar informação</md-button> -->
-            <md-button>Acessar</md-button>
+            <md-button  v-on:click="testFunc()" >Acessar</md-button>
           </md-card-actions>
 
           <md-card-content>
@@ -74,11 +74,23 @@
 </template>
 
 <script>
+  import axios from 'axios';
   export default {
     name: 'hello',
     data() {
       return {
         msg: 'Welcome to Your Vue.js App'
+      }
+    },
+    methods: {
+      testFunc() {
+        axios.get('http://localhost:8080/tcc-back/webapp/Analysis/test')
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       }
     }
   }
