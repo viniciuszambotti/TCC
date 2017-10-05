@@ -84,7 +84,7 @@
     },
     methods: {
       testFunc() {
-        axios.get('http://localhost:8080/tcc-back/webapp/Analysis/test')
+        axios.get('http://localhost:8080/tcc-back/webapi/Analysis/test')
           .then(function (response) {
             console.log(response);
           })

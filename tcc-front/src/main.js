@@ -7,9 +7,13 @@ import 'vue-material/dist/vue-material.css'
 
 var VueMaterial = require('vue-material')
 var Axios = require('axios')
+import VueAxios from 'vue-axios'
+
+// Axios.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
+// Axios.headers.get['Access-Control-Allow-Origin'] = '*';
 
 Vue.use(VueMaterial)
-Vue.use(Axios)
+Vue.use(VueAxios, Axios)
 
 Vue.config.productionTip = false
 

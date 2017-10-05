@@ -1,9 +1,17 @@
 package com.example;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+
 
 /**
  * Root resource (exposed at "myresource" path)
@@ -20,6 +28,12 @@ public class MyResource {
     @GET
     @Path("test")
     public String getIt() {
-        return "Got it!";
+    	Client client = ClientBuilder.newClient();
+    	String result = client.target("http://localhost:8084/").request().get(String.class);
+    	System.out.println(result);
+
+    	
+
+       return "Got it!";
     }
 }
