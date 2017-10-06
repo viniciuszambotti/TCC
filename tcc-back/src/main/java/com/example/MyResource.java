@@ -11,6 +11,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.dao.ExampleDao;
+import com.database.DbConnection;
+
 
 
 /**
@@ -29,8 +32,9 @@ public class MyResource {
     @Path("test")
     public String getIt() {
     	Client client = ClientBuilder.newClient();
-    	String result = client.target("http://localhost:8084/").request().get(String.class);
-    	System.out.println(result);
+//    	String result = client.target("http://localhost:8084/").request().get(String.class);
+//    	System.out.println(result);
+    	ExampleDao.insterExample(DbConnection.getConexaoMySQL());
 
     	
 
