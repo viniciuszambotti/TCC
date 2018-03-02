@@ -41,10 +41,7 @@
       <param-name>cors.supportedMethods</param-name>
       <param-value>GET, HEAD, POST, OPTIONS</param-value>
     </init-param>
-    <init-param>
-      <param-name>cors.supportedHeaders</param-name>
-      <param-value>*</param-value>
-    </init-param>
+
     <init-param>
       <param-name>cors.exposedHeaders</param-name>
       <param-value>X-Test-1, X-Test-2</param-value>
