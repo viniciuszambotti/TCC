@@ -1,37 +1,32 @@
 <template>
   <div>
-    <md-layout style="margin-top: 3%" md-gutter>
+    <md-layout v-for="dado in nAnalises" style="margin-top: 3%" md-gutter>
 
-      <md-layout  md-flex-xsmall="100" md-flex-small="50" md-flex-medium="33">
-        <md-card class="md-primary cardlayout">
-          <md-card-media>
-            <img src="../assets/turnover.jpg">
-          </md-card-media>
-
+      <md-layout  v-for="analise in analises"  style="margin:1%" md-flex-xsmall="100" md-flex-small="50" md-flex-medium="33">
+        <md-card md-with-hover>
           <md-card-header>
-            <div class="md-title">Turnover</div>
-            <div class="md-subhead">Análise de RH</div>
+            <div class="md-title">{{analise.nome}}</div>
           </md-card-header>
 
-          <md-card-actions>
-            <!-- <md-button>Action</md-button> -->
-            <md-button>Acessar</md-button>
-          </md-card-actions>
-
           <md-card-content>
-            conceito frequentemente utilizado na área de Recursos Humanos (RH) para designar a rotatividade de pessoal em uma organização,
-            ou seja, as entradas e saídas de funcionários em determinado período de tempo.
+            {{analise.descricao}}
           </md-card-content>
+
+          <md-card-actions>
+            <md-button>Action</md-button>
+            <md-button>Action</md-button>
+          </md-card-actions>
         </md-card>
       </md-layout>
 
-      <md-layout md-flex-xsmall="100" md-flex-small="50" md-flex-medium="33">
 
-      </md-layout>
+      <!-- <md-layout md-flex-xsmall="100" md-flex-small="50" md-flex-medium="33">
 
-      <md-layout md-flex-xsmall="100" md-flex-small="50" md-flex-medium="33">
+      </md-layout> -->
 
-      </md-layout>
+      <!-- <md-layout md-flex-xsmall="100" md-flex-small="50" md-flex-medium="33">
+
+      </md-layout> -->
     </md-layout>
   </div>
 </template>
@@ -42,7 +37,11 @@
     name: 'main',
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        msg: 'Welcome to Your Vue.js App',
+        analises: [{nome: 'Turnover', descricao: 'conceito frequentemente utilizado na área de Recursos Humanos (RH) para designar a rotatividade de pessoal em uma organização, ou seja, as entradas e saídas de funcionários em determinado período de tempo.'},
+                  {nome: 'Turnover', descricao: 'conceito frequentemente utilizado na área de Recursos Humanos (RH) para designar a rotatividade de pessoal em uma organização, ou seja, as entradas e saídas de funcionários em determinado período de tempo.'},
+                  {nome: 'Turnover', descricao: 'conceito frequentemente utilizado na área de Recursos Humanos (RH) para designar a rotatividade de pessoal em uma organização, ou seja, as entradas e saídas de funcionários em determinado período de tempo.'}],
+        nAnalises: [1]
       }
     },
     methods: {

@@ -1,45 +1,39 @@
 <template>
   <div>
-    <md-layout style="margin: 3%" md-gutter>
-      <md-stepper md-alternate-labels>
-        <md-step md-label="Criar empresa">
-          <h2>Cadastrar nova empresa</h2>
-          <md-input-container>
-            <label>Nome da empresa</label>
-            <md-input v-model="data.nomeEmpresa" maxlength="30"></md-input>
-          </md-input-container>
-          <md-input-container>
-            <label>CNPJ da empresa</label>
-            <md-input v-model="data.cnpjEmpresa" maxlength="30"></md-input>
-          </md-input-container>
-        </md-step>
-        <md-step md-label="Criar departamento">
-
+    <md-stepper md-alternate-labels>
+      <md-step md-label="Criar empresa">
+        <h2>Cadastrar nova empresa</h2>
+        <md-input-container>
+          <label>Nome da empresa</label>
+          <md-input v-model="data.nomeEmpresa" maxlength="30"></md-input>
+        </md-input-container>
+        <md-input-container>
+          <label>CNPJ da empresa</label>
+          <md-input v-model="data.cnpjEmpresa" maxlength="30"></md-input>
+        </md-input-container>
+      </md-step>
+      <md-step md-label="Criar departamento">
         <h2>Adicionar departamento(s)</h2>
         <md-chips v-model="data.nomeDepartamento" md-input-placeholder="Adicionar novo departamento"></md-chips>
-
-        </md-step>
-        <md-step md-label="Selecionar análise">
-          <div  class="phone-viewport">
-            <md-list>
+      </md-step>
+      <md-step md-label="Selecionar análise">
+        <h2>Mapear análises</h2>
+        <div  class="phone-viewport">
+          <md-list>
             <md-list-item v-for="value in data.nomeDepartamento">
-                <span>{{value}}</span>
-
-                <md-list-expand>
+              <span>{{value}}</span>
+              <md-list-expand>
                 <md-list>
-                    <md-list-item v-for="analise in listAnalises"  class="md-inset">
-
-                      <md-switch @change="addAnalise(value, analise)" id="my-test8" name="check">{{analise}}</md-switch>
-                    </md-list-item>
+                  <md-list-item v-for="analise in listAnalises"  class="md-inset">
+                    <md-switch @change="addAnalise(value, analise)" id="my-test8" name="check">{{analise}}</md-switch>
+                  </md-list-item>
                 </md-list>
-                </md-list-expand>
+              </md-list-expand>
             </md-list-item>
-              </md-list>
+          </md-list>
         </div>
-        </md-step>
-      </md-stepper>
-
-    </md-layout>
+      </md-step>
+    </md-stepper>
   </div>
 </template>
 
@@ -57,8 +51,8 @@ export default {
   methods: {
     addAnalise: function(dep, analises){
       if(!this.departamentoExiste(dep))
-        this.analisesPorDp.push({nomeDepartamento:dep, analises:[]})
-        this.gerenciaAnalises(dep, analises)
+      this.analisesPorDp.push({nomeDepartamento:dep, analises:[]})
+      this.gerenciaAnalises(dep, analises)
 
       console.log(  this.analisesPorDp)
     },
@@ -78,30 +72,35 @@ export default {
       var depatamento
       var analise
       var existeAnalise= false
-        for (var i =0; i< this.analisesPorDp.length; i++){
-          depatamento = this.analisesPorDp[i]
+      for (var i =0; i< this.analisesPorDp.length; i++){
+        depatamento = this.analisesPorDp[i]
 
-          if (depatamento.nomeDepartamento === dep){
+        if (depatamento.nomeDepartamento === dep){
 
-            for (var j = 0; j< depatamento.analises; j++){
-              analise =  depatamento.analises[j]
-              if (analise === ana){
-                continue
-              }else{
-                existeAnalise= false
-              }
-            }
+          console.log(depatamento.analises)
 
-            if (!existeAnalise){
-              depatamento.analises.push(ana)
-              return
-            }
-
+          if(depatamento.analises.length === 0){
+            depatamento.analises.push(ana)
+            return
           }
 
+          for (var j = 0; j< depatamento.analises.length; j++){
+            analise =  depatamento.analises[j]
+            if (analise === ana){
+              depatamento.analises.splice(j, 1)
+              return
+            }else{
+              existeAnalise= false
+            }
+          }
+
+          if (!existeAnalise){
+            depatamento.analises.push(ana)
+            return
+          }
         }
 
-
+      }
     }
   }
 }
