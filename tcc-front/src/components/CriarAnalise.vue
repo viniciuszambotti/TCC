@@ -15,6 +15,10 @@
           <label>Tabela de saída</label>
           <md-input v-model="data.table" maxlength="30"></md-input>
         </md-input-container>
+        <md-input-container>
+          <label>Upload script (.py ou .r)</label>
+          <md-file v-model="single"></md-file>
+        </md-input-container>
         <md-button class="md-raised md-primary">Criar</md-button>
       </div>
     </md-tab>
@@ -33,6 +37,10 @@
       <md-input-container>
         <label>Nome do script</label>
         <md-input v-model="data.script" maxlength="30"></md-input>
+      </md-input-container>
+      <md-input-container>
+        <label>Tabela de saída</label>
+        <md-input v-model="data.table" maxlength="30"></md-input>
       </md-input-container>
       <md-input-container>
         <label>Tabela de saída</label>

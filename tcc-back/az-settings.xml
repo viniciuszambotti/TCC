@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0                                          http://maven.apache.org/xsd/settings-1.0.0.xsd">
+<profiles>
+
+</profiles>
+<servers>
+    <server>
+        <id>Tcc-java - FTP</id>
+        <username>Tcc-java\$Tcc-java</username>
+        <password>7nhM71YpgzeheBQL0eAkjX7XszquM4QH6ihpsNn89dmGA6EG3b1DSo5dfoHL</password>
+           <configuration>
+     <fromFile>${basedir}/target/tcc-back.war</fromFile>
+     <url>ftp://waws-prod-sn1-081.ftp.azurewebsites.windows.net/site/wwwroot</url>
+     <toFile>webapps/tcc-back.war</toFile>
+     <serverId>Tcc-java - FTP</serverId>
+   </configuration>
+    </server>
+</servers>
+
+</settings>

@@ -13,8 +13,7 @@
           </md-card-content>
 
           <md-card-actions>
-            <md-button>Action</md-button>
-            <md-button>Action</md-button>
+            <md-button v-on:click="changePage('/Analise')">Action</md-button>
           </md-card-actions>
         </md-card>
       </md-layout>
@@ -33,6 +32,7 @@
 
 <script>
   import axios from 'axios';
+  import router from 'vue-router';
   export default {
     name: 'main',
     data() {
@@ -53,6 +53,9 @@
           .catch(function (error) {
             console.log(error);
           });
+      },
+      changePage: function(name){
+        this.$router.push(name)
       }
     }
   }
