@@ -1,13 +1,24 @@
 <template>
-  <div class="small">
-    <line-chart :chart-data="datacollection"></line-chart>
-    <bar-chart :chart-data="datacollection"></bar-chart>
-    <doughnut :chart-data="datacollection"></doughnut >
-    <pie :chart-data="datacollection"></pie>
-    <bubble :chart-data="datacollection2"></bubble>
+  <md-tabs>
+    <md-tab id="selectAnalise" md-label="Configurar visualização">
 
-    <button @click="fillData()">Randomize</button>
-  </div>
+    </md-tab>
+    <md-tab id="tabular" md-label="Tabelas">
+    </md-tab>
+
+  </md-tab>
+  <md-tab id="graficos" md-label="Gráficos">
+    <div class="small">
+      <line-chart :chart-data="datacollection"></line-chart>
+      <bar-chart :chart-data="datacollection"></bar-chart>
+      <doughnut :chart-data="datacollection"></doughnut >
+        <pie :chart-data="datacollection"></pie>
+        <bubble :chart-data="datacollection2"></bubble>
+
+        <button @click="fillData()">Randomize</button>
+      </div>
+    </md-tab>
+  </md-tabs>
 </template>
 
 <script>
@@ -19,61 +30,61 @@ import Bubble from './charts/Bubble.js'
 
 
 
-  export default {
-    components: {
-      LineChart,
-      BarChart,
-      Doughnut,
-      Pie,
-      Bubble
-    },
-    data () {
-      return {
-        datacollection: null
-      }
-    },
-    mounted () {
-      this.fillData()
-    },
-    methods: {
-      fillData () {
-        this.datacollection = {
-          labels: ['teste1', 'teste2'],
-          datasets: [
-            {
-              label: 'OI',
-              backgroundColor: '#f87979',
-              data: [this.getRandomInt(), this.getRandomInt()]
-            }, {
-              label: 'OI',
-              backgroundColor: '#f87979',
-              data: [this.getRandomInt(), this.getRandomInt()]
-            }
-          ]
-        },
-        this.datacollection2 = {
-          datasets: [
-        {
-        label: 'Data One',
-           backgroundColor: '#f87979',
-        data: [
-         {
-           x: 20,
-           y: 25,
-           r: 5
-         },
-         {
-           x: 40,
-           y: 10,
-           r: 10
-         },
-         {
-           x: 30,
-           y: 22,
-           r: 30
-         }
-       ]
-     }]
+export default {
+  components: {
+    LineChart,
+    BarChart,
+    Doughnut,
+    Pie,
+    Bubble
+  },
+  data () {
+    return {
+      datacollection: null
+    }
+  },
+  mounted () {
+    this.fillData()
+  },
+  methods: {
+    fillData () {
+      this.datacollection = {
+        labels: ['teste1', 'teste2'],
+        datasets: [
+          {
+            label: 'OI',
+            backgroundColor: '#f87979',
+            data: [this.getRandomInt(), this.getRandomInt()]
+          }, {
+            label: 'OI',
+            backgroundColor: '#f87979',
+            data: [this.getRandomInt(), this.getRandomInt()]
+          }
+        ]
+      },
+      this.datacollection2 = {
+        datasets: [
+          {
+            label: 'Data One',
+            backgroundColor: '#f87979',
+            data: [
+              {
+                x: 20,
+                y: 25,
+                r: 5
+              },
+              {
+                x: 40,
+                y: 10,
+                r: 10
+              },
+              {
+                x: 30,
+                y: 22,
+                r: 30
+              }
+            ]
+          }]
         }
       },
       getRandomInt () {
@@ -81,11 +92,11 @@ import Bubble from './charts/Bubble.js'
       }
     }
   }
-</script>
+  </script>
 
-<style>
+  <style>
   .small {
     max-width: 600px;
     margin:  150px auto;
   }
-</style>
+  </style>

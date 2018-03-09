@@ -3,9 +3,19 @@ package com.database;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+
 import com.mysql.jdbc.Connection;
 
 public class DbConnection {
+
+
+
+	 
 	public static String status = "Não conectou...";
 
 	//Método de Conexão//

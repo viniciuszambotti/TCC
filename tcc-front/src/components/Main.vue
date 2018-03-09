@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{testFunc()}}
     <md-layout v-for="dado in nAnalises" style="margin-top: 3%" md-gutter>
 
       <md-layout  v-for="analise in analises"  style="margin:1%" md-flex-xsmall="100" md-flex-small="50" md-flex-medium="33">
@@ -46,7 +47,7 @@
     },
     methods: {
       testFunc() {
-        axios.get('http://localhost:8080/tcc-back/webapi/Analysis/test')
+        axios.get('http://localhost:8080/tcc-back/webapi/empresa/test')
           .then(function (response) {
             console.log(response);
           })
