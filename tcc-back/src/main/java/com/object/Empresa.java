@@ -1,26 +1,15 @@
 package com.object;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name="Empresa")
+
+
 public class Empresa {
-	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@Column
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+
+	private int id;   
 	
-	@Column(name="nome")
 	private String nome;
 	
-	@Column(name="cnpj")
 	private String cnpj;
 
 	public String getNome() {
@@ -42,6 +31,11 @@ public class Empresa {
 	public int getId() {
 		return id;
 	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	
 	
 

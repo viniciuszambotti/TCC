@@ -1,103 +1,92 @@
 package com.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 
 import com.object.Empresa;
 
 public class EmpresaDao {
-	static Session sessionObj;
-	static SessionFactory sessionFactoryObj;
+	private final static String TABLE = "Empresa";
 
-	private static SessionFactory buildSessionFactory() {
-		Configuration configObj = new Configuration();
-		configObj.configure("hibernate.cfg.xml");
-		ServiceRegistry serviceRegistryObj = new StandardServiceRegistryBuilder().applySettings(configObj.getProperties()).build(); 
-		sessionFactoryObj = configObj.buildSessionFactory(serviceRegistryObj);
-		return sessionFactoryObj;
+	public static String createRecord(Connection conn, Empresa empresa) throws SQLException {
+		String query = "insert into " + TABLE + " (nome, cnpj)" + " values (?, ?)";
 
+		// create the mysql insert preparedstatement
+		PreparedStatement preparedStmt;
+		try {
+			preparedStmt = conn.prepareStatement(query);
+			preparedStmt.setString(1, empresa.getNome());
+			preparedStmt.setString(2, empresa.getCnpj());
+			preparedStmt.execute();
+			conn.close();
+			return "Inserido com sucesso";
+		} catch (SQLException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			conn.close();
+			return "Falha ao inserir";
+
+		}
 
 	}
 
-	public static void createRecord(Empresa empresa) {
-		int count = 0;
+	public static void updateRecord(Connection conn, Empresa empresa) throws SQLException {
+		PreparedStatement preparedStatement = null;
 
-		try {
-			// Getting Session Object From SessionFactory
-			sessionObj = buildSessionFactory().openSession();
-			sessionObj.beginTransaction();
-			sessionObj.save(empresa);
+		String updateTableSQL = "UPDATE " + TABLE + " SET nome = ?,cnpj = ? " + " WHERE id = ?";
+		preparedStatement = conn.prepareStatement(updateTableSQL);
+		preparedStatement.setString(1, empresa.getNome());
+		preparedStatement.setString(2, empresa.getCnpj());
+		preparedStatement.setInt(3, empresa.getId());
 
-			// Committing The Transactions To The Database
-			sessionObj.getTransaction().commit();
-			System.out.println("Empresa Criada");
-
-		}catch(Exception sqlException) {
-			sessionObj.getTransaction().rollback();
-			sqlException.printStackTrace();    		 
-		} finally {
-			if(sessionObj != null) {
-				sessionObj.close();
-			}
-		}
-
+		// execute update SQL stetement
+		preparedStatement.executeUpdate();
+		conn.close();
 
 	}
-	
-	@SuppressWarnings("rawtypes")
-	public static List displayRecords() {
-		List empresas = new ArrayList();
 
-		try {
-			sessionObj = buildSessionFactory().openSession();
-			sessionObj.beginTransaction();
-			empresas = sessionObj.createQuery("FROM Empresa").list();
-		} catch(Exception sqlException) {
-			sessionObj.getTransaction().rollback();
-			sqlException.printStackTrace();
-
-		} finally {
-			if(sessionObj != null) {
-				sessionObj.close();
-			}
+	public static Empresa findRecordById(Connection conn, int id) throws SQLException {
+		Empresa empresa = new Empresa();
+		String selectSQL = "SELECT * FROM " + TABLE + " WHERE id = ?";
+		PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+		preparedStatement.setInt(1, id);
+		ResultSet rs = preparedStatement.executeQuery(selectSQL);
+		while (rs.next()) {
+			empresa.setNome(rs.getString("nome"));
+			empresa.setCnpj(rs.getString("cnpj"));
 		}
+		conn.close();
+		return empresa;
+	}
 
+	public static List<Empresa> getAll(Connection conn) throws SQLException {
+		Empresa empresa;
+		List<Empresa> empresas = new ArrayList<>();
+		String selectSQL = "SELECT * FROM " + TABLE;
+		PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+		ResultSet rs = preparedStatement.executeQuery(selectSQL);
+		while (rs.next()) {
+			empresa = new Empresa();
+			empresa.setId(rs.getInt("id"));
+			empresa.setNome(rs.getString("nome"));
+			empresa.setCnpj(rs.getString("cnpj"));
+			empresas.add(empresa);
+		}
+		conn.close();
 		return empresas;
 	}
 
-	public static void updateRecord(int id, Empresa empresa) {
-		try{
-			sessionObj = buildSessionFactory().openSession();
-			sessionObj.beginTransaction();
-			Empresa novaEmpresa = (Empresa) sessionObj.get(Empresa.class, id);
-
-			novaEmpresa.setCnpj(empresa.getCnpj());
-			novaEmpresa.setNome(empresa.getNome());
-			sessionObj.getTransaction().commit();
-		}catch(Exception e) {
-			sessionObj.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			if(sessionObj != null) {
-				sessionObj.close();
-			}
-		}
+	public static void deleteRecord(Connection conn, int id) throws SQLException {
+		String deleteSQL = "DELETE from " + TABLE + " WHERE id = ?";
+		PreparedStatement preparedStatement = conn.prepareStatement(deleteSQL);
+		System.out.println(deleteSQL);
+		preparedStatement.setInt(1, id);
+		// execute delete SQL stetement
+		preparedStatement.executeUpdate();
 	}
-	
-    public static Empresa findRecordById(Integer id) {
-        Empresa empresa = null;
-        sessionObj = buildSessionFactory().openSession();
-        sessionObj.beginTransaction();
-        empresa = (Empresa) sessionObj.load(Empresa.class, id);
-        
-        return empresa;
-
-
-    }
 }
