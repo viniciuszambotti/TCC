@@ -1,0 +1,92 @@
+package com.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.object.Departamento;
+
+public class DepartamentoDao {
+	private final static String TABLE = "Departamento";
+
+	public static String createRecord(Connection conn, Departamento departamento) throws SQLException {
+		String query = "insert into " + TABLE + " (nome, fk_empresa)" + " values (?, ?)";
+
+		// create the mysql insert preparedstatement
+		PreparedStatement preparedStmt;
+		try {
+			preparedStmt = conn.prepareStatement(query);
+			preparedStmt.setString(1, departamento.getNome());
+			preparedStmt.setInt(2, departamento.getFk_empresa());
+			preparedStmt.execute();
+			conn.close();
+			return "Inserido com sucesso";
+		} catch (SQLException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			conn.close();
+			return "Falha ao inserir";
+
+		}
+
+	}
+
+	public static void updateRecord(Connection conn, Departamento departamento) throws SQLException {
+		PreparedStatement preparedStatement = null;
+
+		String updateTableSQL = "UPDATE " + TABLE + " SET nome = ?,fk_empresa = ? " + " WHERE id = ?";
+		preparedStatement = conn.prepareStatement(updateTableSQL);
+		preparedStatement.setString(1, departamento.getNome());
+		preparedStatement.setInt(2, departamento.getFk_empresa());
+		preparedStatement.setInt(3,departamento.getId());
+
+		// execute update SQL stetement
+		preparedStatement.executeUpdate();
+		conn.close();
+
+	}
+
+	public static Departamento findRecordById(Connection conn, int id) throws SQLException {
+		Departamento departamento = new Departamento();
+		String selectSQL = "SELECT * FROM " + TABLE + " WHERE id = ?";
+		PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+		preparedStatement.setInt(1, id);
+		ResultSet rs = preparedStatement.executeQuery(selectSQL);
+		while (rs.next()) {
+			departamento.setNome(rs.getString("nome"));
+			departamento.setFk_empresa(rs.getInt("fk_empresa"));
+		}
+		conn.close();
+		return departamento;
+	}
+
+	public static List<Departamento> getAll(Connection conn) throws SQLException {
+		Departamento departamento;
+		List<Departamento> departamentos = new ArrayList<>();
+		String selectSQL = "SELECT * FROM " + TABLE;
+		PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+		ResultSet rs = preparedStatement.executeQuery(selectSQL);
+		while (rs.next()) {
+			departamento = new Departamento();
+			departamento.setId(rs.getInt("id"));
+			departamento.setNome(rs.getString("nome"));
+			departamento.setFk_empresa(rs.getInt("fk_empresa"));
+			departamentos.add(departamento);
+		}
+		conn.close();
+		return departamentos;
+	}
+
+	public static void deleteRecord(Connection conn, int id) throws SQLException {
+		String deleteSQL = "DELETE from " + TABLE + " WHERE id = ?";
+		PreparedStatement preparedStatement = conn.prepareStatement(deleteSQL);
+		System.out.println(deleteSQL);
+		preparedStatement.setInt(1, id);
+		// execute delete SQL stetement
+		preparedStatement.executeUpdate();
+	}
+}

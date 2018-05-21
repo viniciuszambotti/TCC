@@ -36,6 +36,12 @@
           </md-button>
         </md-list-item>
         <md-list-item>
+          <md-button v-on:click="changePage('/CriarDepartamento')" class=" md-list-action">
+            <md-icon>business_center</md-icon>
+            Criar novo departamento
+          </md-button>
+        </md-list-item>
+        <md-list-item>
           <md-button v-on:click="changePage('/CriarUsuario')" class=" md-list-action">
             <md-icon>person</md-icon>
             Criar/editar Usuario

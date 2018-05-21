@@ -2,46 +2,27 @@
   <md-tabs>
     <md-tab id="criar" md-label="Criar">
       <div style="margin:3%">
-        <h2>Cadastrar nova análise</h2>
+        <h2>Cadastrar novo departamento</h2>
         <md-input-container>
-          <label>Nome da análise</label>
-          <md-input v-model="data.nomeAnalise" maxlength="30"></md-input>
-        </md-input-container>
-        <md-input-container>
-          <label>Nome do script</label>
-          <md-input v-model="data.nomeScript" maxlength="30"></md-input>
-        </md-input-container>
-        <md-input-container>
-          <label>Tabela de saída</label>
-          <md-input v-model="data.tabelaSaida" maxlength="30"></md-input>
-        </md-input-container>
-        <md-input-container>
-          <label>Upload script (.py ou .r)</label>
-          <md-file v-model="single"></md-file>
+          <label>Nome do departamento</label>
+          <md-input v-model="data.nome" maxlength="30"></md-input>
         </md-input-container>
         <md-button @click="criar" class="md-raised md-primary">Criar</md-button>
       </div>
     </md-tab>
     <md-tab id="editar" md-label="Editar">
       <div style="margin:3%">
-        <h2>Editar analises</h2>
+        <h2>Editar departamentos</h2>
         <!-- object value -->
         <model-select :options="options"
         v-model="item"
         placeholder="select item">
       </model-select>
       <md-input-container>
-        <label>Nome da análise</label>
+        <label>Nome do departamento</label>
         <md-input v-model="item.text" maxlength="30"></md-input>
       </md-input-container>
-      <md-input-container>
-        <label>Nome do script</label>
-        <md-input v-model="item.nomeScript" maxlength="30"></md-input>
-      </md-input-container>
-      <md-input-container>
-        <label>Tabela de saída</label>
-        <md-input v-model="item.tabelaSaida" maxlength="30"></md-input>
-      </md-input-container>
+
       <md-button @click="editar" class="md-raised md-primary">Editar</md-button>
         <md-button @click="deletar" class="md-raised md-primary">Deletar</md-button>
 
@@ -61,8 +42,7 @@ export default {
   data() {
     return {
       single:{},
-      data:{nomeAnalise:'', nomeScript: '', tabelaSaida: ''},
-      editarAnalise:{},
+      data:{nome:'', fk_empresa: ''},
       options: [
       ],
       item: {
@@ -74,11 +54,11 @@ export default {
   methods: {
     init: function () {
       var self = this
-      axios.post('http://localhost:8080/tcc-back/webapi/analise/get',{
+      axios.post('http://localhost:8080/tcc-back/webapi/departamento/get',{
       })
       .then(function (response) {
         console.log(JSON.stringify(response.data))
-        var resp = JSON.stringify(response.data).replace(new RegExp("id\"", 'g'), 'value\"').replace(new RegExp("nomeAnalise", 'g'), 'text')
+        var resp = JSON.stringify(response.data).replace(new RegExp("id\"", 'g'), 'value\"').replace(new RegExp("nome", 'g'), 'text')
         self.options = JSON.parse(resp)
         console.log(self.options)
 
@@ -91,7 +71,7 @@ export default {
     criar : function(){
       console.log('fazendo req')
       var req = this.data
-      axios.post('http://localhost:8080/tcc-back/webapi/analise/criar',{
+      axios.post('http://localhost:8080/tcc-back/webapi/departamento/criar',{
         req
       })
       .then(function (response) {
@@ -105,11 +85,9 @@ export default {
     console.log('fazendo req')
     var req = {
       id: this.item.value,
-      nomeAnalise: this.item.text,
-      nomeScript: this.item.nomeScript,
-      tabelaSaida: this.item.tabelaSaida
+      nome: this.item.text
     }
-    axios.post('http://localhost:8080/tcc-back/webapi/analise/editar',{
+    axios.post('http://localhost:8080/tcc-back/webapi/departamento/editar',{
       req
     })
     .then(function (response) {
@@ -124,11 +102,9 @@ deletar : function(){
   console.log('fazendo req')
   var req = {
     id: this.item.value,
-    nomeAnalise: this.item.text,
-    nomeScript: this.item.nomeScript,
-    tabelaSaida: this.item.tabelaSaida
+    nome: this.item.text
   }
-  axios.post('http://localhost:8080/tcc-back/webapi/analise/deletar',{
+  axios.post('http://localhost:8080/tcc-back/webapi/departamento/deletar',{
     req
   })
   .then(function (response) {
