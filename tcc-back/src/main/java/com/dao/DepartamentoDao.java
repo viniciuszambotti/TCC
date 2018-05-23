@@ -13,7 +13,7 @@ public class DepartamentoDao {
 	private final static String TABLE = "Departamento";
 
 	public static String createRecord(Connection conn, Departamento departamento) throws SQLException {
-		String query = "insert into " + TABLE + " (nome, fk_empresa)" + " values (?, ?)";
+		String query = "insert into " + TABLE + " (nome, fk_empresa, analises)" + " values (?, ?, ?)";
 
 		// create the mysql insert preparedstatement
 		PreparedStatement preparedStmt;
@@ -21,6 +21,7 @@ public class DepartamentoDao {
 			preparedStmt = conn.prepareStatement(query);
 			preparedStmt.setString(1, departamento.getNome());
 			preparedStmt.setInt(2, departamento.getFk_empresa());
+			preparedStmt.setString(3, departamento.getAnalises());
 			preparedStmt.execute();
 			conn.close();
 			return "Inserido com sucesso";
@@ -38,11 +39,12 @@ public class DepartamentoDao {
 	public static void updateRecord(Connection conn, Departamento departamento) throws SQLException {
 		PreparedStatement preparedStatement = null;
 
-		String updateTableSQL = "UPDATE " + TABLE + " SET nome = ?,fk_empresa = ? " + " WHERE id = ?";
+		String updateTableSQL = "UPDATE " + TABLE + " SET nome = ?,fk_empresa = ?, analises = ? " + " WHERE id = ?";
 		preparedStatement = conn.prepareStatement(updateTableSQL);
 		preparedStatement.setString(1, departamento.getNome());
 		preparedStatement.setInt(2, departamento.getFk_empresa());
-		preparedStatement.setInt(3,departamento.getId());
+		preparedStatement.setString(3, departamento.getAnalises());
+		preparedStatement.setInt(4,departamento.getId());
 
 		// execute update SQL stetement
 		preparedStatement.executeUpdate();
@@ -59,6 +61,7 @@ public class DepartamentoDao {
 		while (rs.next()) {
 			departamento.setNome(rs.getString("nome"));
 			departamento.setFk_empresa(rs.getInt("fk_empresa"));
+			departamento.setAnalises(rs.getString("analises"));
 		}
 		conn.close();
 		return departamento;
@@ -75,6 +78,7 @@ public class DepartamentoDao {
 			departamento.setId(rs.getInt("id"));
 			departamento.setNome(rs.getString("nome"));
 			departamento.setFk_empresa(rs.getInt("fk_empresa"));
+			departamento.setAnalises(rs.getString("analises"));
 			departamentos.add(departamento);
 		}
 		conn.close();

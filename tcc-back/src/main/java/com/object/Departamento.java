@@ -7,6 +7,7 @@ public class Departamento {
 	private int id;	
 	private String nome;	
 	private int fk_empresa;
+	private String analises;
 
 	public int getId() {
 		return id;
@@ -31,6 +32,16 @@ public class Departamento {
 	public void setFk_empresa(int fk_empresa) {
 		this.fk_empresa = fk_empresa;
 	}
+
+	public String getAnalises() {
+		return analises;
+	}
+
+	public void setAnalises(String analises) {
+		this.analises = analises;
+	}
+	
+	
 
 
 }

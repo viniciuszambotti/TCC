@@ -20,7 +20,7 @@
         <h2>Editar empresa</h2>
         <model-select :options="options"
         v-model="item"
-        placeholder="select item">
+        placeholder="Selecione a empresa">
       </model-select>
         <md-input-container>
           <label>Nome da empresa</label>

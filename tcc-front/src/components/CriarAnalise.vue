@@ -28,7 +28,7 @@
         <!-- object value -->
         <model-select :options="options"
         v-model="item"
-        placeholder="select item">
+        placeholder="Selecione a analise">
       </model-select>
       <md-input-container>
         <label>Nome da análise</label>
