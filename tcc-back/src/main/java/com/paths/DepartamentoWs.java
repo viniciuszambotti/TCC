@@ -61,4 +61,15 @@ public class DepartamentoWs {
 
 	       return "ok";
 	    }
+	    
+	    @POST
+	    @Path("getById")
+	    public String getById(String req) throws ClassNotFoundException, SQLException, JsonParseException, JsonMappingException, IOException {
+	    	
+	    	ObjectMapper mapper = new ObjectMapper();
+	    	Departamento obj = mapper.readValue(util.formataReq(req), Departamento.class);
+	    	Connection conn = DbConnection.Conectar();
+	    	
+	       return mapper.writeValueAsString(DepartamentoDao.findRecordById(conn, obj.getId()));
+	    }
 }

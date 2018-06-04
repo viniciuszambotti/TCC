@@ -32,9 +32,13 @@
   <md-tab id="editar" md-label="Editar">
     <div style="margin:3%">
       <h2>Editar dados pessoais</h2>
+      <model-select :options="options2"
+      v-model="item2"
+      placeholder="Selecione o usuario">
+    </model-select>
       <md-input-container>
         <label>Nome</label>
-        <md-input v-model="data.usuario" maxlength="30"></md-input>
+        <md-input v-model="item2.text" maxlength="30"></md-input>
       </md-input-container>
       <md-input-container>
         <model-select :options="options"
@@ -44,15 +48,15 @@
     </md-input-container>
     <md-input-container>
       <label>CPF</label>
-      <md-input v-model="data.cpf" maxlength="30"></md-input>
+      <md-input v-model="item2.cpf" maxlength="30"></md-input>
     </md-input-container>
     <md-input-container>
       <label>Email</label>
-      <md-input v-model="data.email" maxlength="30"></md-input>
+      <md-input v-model="item2.email" maxlength="30"></md-input>
     </md-input-container>
     <md-input-container>
       <label>Senha</label>
-      <md-input  type="password" v-model="data.senha" maxlength="30"></md-input>
+      <md-input  type="password" v-model="item2.senha" maxlength="30"></md-input>
     </md-input-container>
     <md-button @click="editar" class="md-raised md-primary">Editar</md-button>
     <md-button @click="deletar" class="md-raised md-primary">Deletar</md-button>
@@ -74,7 +78,13 @@ export default {
       data:{usuario:'', cpf: '', email: '', fk_departamento: "", senha:""},
       options: [
       ],
+      options2: [
+      ],
       item: {
+        value: '',
+        text: ''
+      },
+      item2: {
         value: '',
         text: ''
       }
@@ -83,6 +93,18 @@ export default {
   methods: {
     init: function () {
       var self = this
+      axios.post('http://localhost:8080/tcc-back/webapi/usuario/get',{
+      })
+      .then(function (response) {
+        console.log(JSON.stringify(response.data))
+        var resp = JSON.stringify(response.data).replace(new RegExp("id\"", 'g'), 'value\"').replace(new RegExp("usuario", 'g'), 'text')
+        self.options2 = JSON.parse(resp)
+        console.log(self.options)
+
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
       axios.post('http://localhost:8080/tcc-back/webapi/departamento/get',{
       })
       .then(function (response) {
@@ -117,8 +139,12 @@ export default {
     editar : function(){
       console.log('fazendo req')
       var req = {
-        id: this.item.value,
-        nome: this.item.text
+        id: this.item2.value,
+        usuario: this.item2.text,
+        cpf: this.item2.cpf,
+        email: this.item2.email,
+        senha: this.item2.senha,
+        fk_departamento: this.item.value
       }
       axios.post('http://localhost:8080/tcc-back/webapi/usuario/editar',{
         req
@@ -134,8 +160,8 @@ export default {
       var self = this
       console.log('fazendo req')
       var req = {
-        id: this.item.value,
-        nome: this.item.text
+        id: this.item2.value,
+        usuario: this.item2.text
       }
       axios.post('http://localhost:8080/tcc-back/webapi/usuario/deletar',{
         req

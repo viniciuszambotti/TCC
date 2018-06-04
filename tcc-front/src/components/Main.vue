@@ -1,16 +1,15 @@
 <template>
   <div>
-    {{testFunc()}}
     <md-layout v-for="dado in nAnalises" style="margin-top: 3%" md-gutter>
 
       <md-layout  v-for="analise in analises"  style="margin:1%" md-flex-xsmall="100" md-flex-small="50" md-flex-medium="33">
         <md-card md-with-hover>
           <md-card-header>
-            <div class="md-title">{{analise.nome}}</div>
+            <div class="md-title">Nome da Analise: {{analise.nomeAnalise}}</div>
           </md-card-header>
 
           <md-card-content>
-            {{analise.descricao}}
+            Script que será executado: {{analise.nomeScript}}
           </md-card-content>
 
           <md-card-actions>
@@ -46,10 +45,12 @@
       }
     },
     methods: {
-      testFunc() {
-        axios.get('http://localhost:8080/tcc-back/webapi/empresa/test')
+      init() {
+        var that = this;
+        axios.post('http://localhost:8080/tcc-back/webapi/analise/get')
           .then(function (response) {
             console.log(response);
+            that.analises = response.data
           })
           .catch(function (error) {
             console.log(error);
@@ -58,6 +59,9 @@
       changePage: function(name){
         this.$router.push(name)
       }
+    },
+    beforeMount(){
+      this.init()
     }
   }
 
