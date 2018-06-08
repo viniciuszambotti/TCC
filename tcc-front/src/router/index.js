@@ -32,7 +32,7 @@ export default new Router({
       component: CriarAnalise
     },
     {
-      path: '/Analise',
+      path: '/Analise/:nome',
       name: 'Analise',
       component: Analise
     },
