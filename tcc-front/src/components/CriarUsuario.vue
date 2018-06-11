@@ -7,8 +7,8 @@
           <label>Nome</label>
           <md-input v-model="data.usuario" maxlength="30"></md-input>
         </md-input-container>
-        <md-input-container>
-          <model-select :options="options"
+        <md-input-container v-show="this.$route.path !== '/CriarUsuario/1'">
+          <model-select  :options="options"
           v-model="item"
           placeholder="Departamento">
         </model-select>
@@ -29,7 +29,7 @@
       <md-button @click="criar" class="md-raised md-primary">Criar</md-button>
     </div>
   </md-tab>
-  <md-tab id="editar" md-label="Editar">
+  <md-tab v-show="this.$route.path !== '/CriarUsuario/1'" id="editar" md-label="Editar">
     <div style="margin:3%">
       <h2>Editar dados pessoais</h2>
       <model-select :options="options2"
@@ -67,6 +67,7 @@
 
 <script>
 import axios from 'axios';
+import router from 'vue-router';
 import { ModelSelect } from 'vue-search-select'
 export default {
   name: 'criarUsuario',
@@ -111,7 +112,6 @@ export default {
         console.log(JSON.stringify(response.data))
         var resp = JSON.stringify(response.data).replace(new RegExp("id\"", 'g'), 'value\"').replace(new RegExp("nome", 'g'), 'text')
         self.options = JSON.parse(resp)
-        console.log(self.options)
 
       })
       .catch(function (error) {
@@ -122,6 +122,7 @@ export default {
     criar : function(){
       console.log('fazendo req')
       var req = this.data;
+      var that = this;
       req.fk_departamento = this.item.value
 
       console.log(req)
@@ -131,6 +132,8 @@ export default {
       })
       .then(function (response) {
         console.log(response);
+        if(that.$route.path === '/CriarUsuario/1')
+          that.$router.push('/');
       })
       .catch(function (error) {
         console.log(error);

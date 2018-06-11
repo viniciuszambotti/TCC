@@ -5,7 +5,6 @@ public class Analise {
 	private int id;	
 	private String nomeAnalise;
 	private String nomeScript;
-	private String tabelaSaida;
 	private String fk_departamento;
 	
 	
@@ -32,12 +31,6 @@ public class Analise {
 	}
 	public void setNomeScript(String nomeScript) {
 		this.nomeScript = nomeScript;
-	}
-	public String getTabelaSaida() {
-		return tabelaSaida;
-	}
-	public void setTabelaSaida(String tabelaSaida) {
-		this.tabelaSaida = tabelaSaida;
 	}
 	
 	

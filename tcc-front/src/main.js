@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import 'vue-material/dist/vue-material.css'
-
+import VueSession from 'vue-session'
 var VueMaterial = require('vue-material')
 var Axios = require('axios')
 import VueAxios from 'vue-axios'
@@ -14,6 +14,7 @@ import VueAxios from 'vue-axios'
 
 Vue.use(VueMaterial)
 Vue.use(VueAxios, Axios)
+Vue.use(VueSession)
 
 Vue.config.productionTip = false
 

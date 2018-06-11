@@ -6,6 +6,7 @@ import CriarAnalise from '@/components/CriarAnalise'
 import CriarUsuario from '@/components/CriarUsuario'
 import Analise from '@/components/Analise'
 import Departamento from '@/components/CriarDepartamento'
+import Login from '@/components/Login'
 
 Vue.use(Router)
 
@@ -13,6 +14,11 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/Main',
       name: 'Main',
       component: Main
     },
@@ -22,7 +28,7 @@ export default new Router({
       component: CriarEmpresa
     },
     {
-      path: '/CriarUsuario',
+      path: '/CriarUsuario/:ed',
       name: 'CriarUsuario',
       component: CriarUsuario
     },

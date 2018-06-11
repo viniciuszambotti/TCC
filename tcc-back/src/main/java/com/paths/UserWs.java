@@ -61,4 +61,15 @@ public class UserWs {
 
        return "ok";
     }
+    
+    @POST
+    @Path("verificar")
+    public String verificar(String req) throws ClassNotFoundException, SQLException, JsonParseException, JsonMappingException, IOException {
+    	
+    	ObjectMapper mapper = new ObjectMapper();
+    	User obj = mapper.readValue(util.formataReq(req), User.class);
+    	Connection conn = DbConnection.Conectar();
+    	 return mapper.writeValueAsString(UserDao.findUserPsw(conn, obj));
+
+    }
 }

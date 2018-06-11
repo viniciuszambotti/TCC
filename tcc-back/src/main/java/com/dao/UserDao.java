@@ -76,6 +76,24 @@ public class UserDao {
 		conn.close();
 		return user;
 	}
+	public static User findUserPsw(Connection conn, User usr) throws SQLException {
+		String selectSQL = "SELECT * FROM " + TABLE + " WHERE email ='" + usr.getEmail() + "' AND senha='" + usr.getSenha() + "'";
+		PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+		
+		ResultSet rs = preparedStatement.executeQuery(selectSQL);
+
+		User user = new User();
+		while (rs.next()) {
+			user.setUsuario(rs.getString("usuario"));
+			user.setEmail(rs.getString("email"));
+			user.setSenha(rs.getString("senha"));
+			user.setTipo(rs.getString("tipo"));
+			user.setCpf(rs.getString("cpf"));
+			user.setFk_departamento(rs.getInt("fk_departamento"));
+		}
+		conn.close();
+		return user;
+	}
 
 	public static List<User> getAll(Connection conn) throws SQLException {
 		User user;

@@ -17,7 +17,8 @@
     "vue-chartjs": "^3.2.1",
     "vue-material": "^0.7.5",
     "vue-router": "^2.7.0",
-    "vue-search-select": "^2.5.0"
+    "vue-search-select": "^2.5.0",
+    "vue-session": "^1.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

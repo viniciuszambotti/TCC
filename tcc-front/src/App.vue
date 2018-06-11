@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
-    <md-toolbar>
+    <md-toolbar v-show="this.$route.path !== '/' && this.$route.path !== '/CriarUsuario/1'">
       <md-button class="md-icon-button" @click="toggleLeftSidenav">
         <md-icon>menu</md-icon>
       </md-button>
@@ -9,7 +9,7 @@
       <h2 class="md-title">My App</h2>
     </md-toolbar>
 
-    <md-sidenav class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
+    <md-sidenav  class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
       <md-toolbar class="md-large">
         <div class="md-toolbar-container">
           <h3 class="md-title">Menu</h3>
@@ -18,7 +18,7 @@
 
       <md-list>
         <md-list-item>
-          <md-button v-on:click="changePage('/')" class=" md-list-action">
+          <md-button v-on:click="changePage('/Main')" class=" md-list-action">
             <md-icon>home</md-icon>
             Página inicial
           </md-button>
@@ -57,7 +57,16 @@
   import router from 'vue-router';
 export default {
   name: 'app',
+  data() {
+    return {
+      logged:this.$session.get('enable')
+    }
+  },
   methods: {
+    init(){
+      console.log()
+
+    },
     toggleLeftSidenav() {
       this.$refs.leftSidenav.toggle();
     },
@@ -72,6 +81,9 @@ export default {
     this.closeLeftSidenav()
       this.$router.push(name)
     }
+  },
+  beforeMount(){
+    this.init()
   }
 }
 

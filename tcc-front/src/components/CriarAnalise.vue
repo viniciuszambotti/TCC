@@ -12,10 +12,6 @@
           <md-input v-model="data.nomeScript" maxlength="30"></md-input>
         </md-input-container>
         <md-input-container>
-          <label>Tabela de saída</label>
-          <md-input v-model="data.tabelaSaida" maxlength="30"></md-input>
-        </md-input-container>
-        <md-input-container>
           <label>Upload script (.py ou .r)</label>
           <md-file v-model="single"></md-file>
         </md-input-container>
@@ -38,10 +34,6 @@
         <label>Nome do script</label>
         <md-input v-model="item.nomeScript" maxlength="30"></md-input>
       </md-input-container>
-      <md-input-container>
-        <label>Tabela de saída</label>
-        <md-input v-model="item.tabelaSaida" maxlength="30"></md-input>
-      </md-input-container>
       <md-button @click="editar" class="md-raised md-primary">Editar</md-button>
         <md-button @click="deletar" class="md-raised md-primary">Deletar</md-button>
 
@@ -61,7 +53,7 @@ export default {
   data() {
     return {
       single:{},
-      data:{nomeAnalise:'', nomeScript: '', tabelaSaida: ''},
+      data:{nomeAnalise:'', nomeScript: ''},
       editarAnalise:{},
       options: [
       ],
@@ -106,8 +98,7 @@ export default {
     var req = {
       id: this.item.value,
       nomeAnalise: this.item.text,
-      nomeScript: this.item.nomeScript,
-      tabelaSaida: this.item.tabelaSaida
+      nomeScript: this.item.nomeScript
     }
     axios.post('http://localhost:8080/tcc-back/webapi/analise/editar',{
       req
@@ -125,8 +116,7 @@ deletar : function(){
   var req = {
     id: this.item.value,
     nomeAnalise: this.item.text,
-    nomeScript: this.item.nomeScript,
-    tabelaSaida: this.item.tabelaSaida
+    nomeScript: this.item.nomeScript
   }
   axios.post('http://localhost:8080/tcc-back/webapi/analise/deletar',{
     req

@@ -14,7 +14,7 @@ public class AnaliseDao {
 	private final static String TABLE = "Analise";
 
 	public static String createRecord(Connection conn, Analise analise) throws SQLException {
-		String query = "insert into " + TABLE + " (nomeAnalise, nomeScript, tabelaSaida)" + " values (?, ?, ?)";
+		String query = "insert into " + TABLE + " (nomeAnalise, nomeScript)" + " values (?, ?)";
 
 		// create the mysql insert preparedstatement
 		PreparedStatement preparedStmt;
@@ -22,7 +22,6 @@ public class AnaliseDao {
 			preparedStmt = conn.prepareStatement(query);
 			preparedStmt.setString(1, analise.getNomeAnalise());
 			preparedStmt.setString(2, analise.getNomeScript());
-			preparedStmt.setString(3, analise.getTabelaSaida());
 			preparedStmt.execute();
 			conn.close();
 			return "Inserido com sucesso";
@@ -40,11 +39,10 @@ public class AnaliseDao {
 	public static void updateRecord(Connection conn, Analise analise) throws SQLException {
 		PreparedStatement preparedStatement = null;
 
-		String updateTableSQL = "UPDATE " + TABLE + " SET nomeAnalise = ?,nomeScript = ?, tabelaSaida= ? " + " WHERE id = ?";
+		String updateTableSQL = "UPDATE " + TABLE + " SET nomeAnalise = ?,nomeScript = ? " + " WHERE id = ?";
 		preparedStatement = conn.prepareStatement(updateTableSQL);
 		preparedStatement.setString(1, analise.getNomeAnalise());
 		preparedStatement.setString(2, analise.getNomeScript());
-		preparedStatement.setString(3, analise.getTabelaSaida());
 		preparedStatement.setInt(4, analise.getId());
 
 		// execute update SQL stetement
@@ -62,7 +60,6 @@ public class AnaliseDao {
 		while (rs.next()) {
 			analise.setNomeAnalise(rs.getString("nomeAnalise"));
 			analise.setNomeScript(rs.getString("nomeScript"));
-			analise.setTabelaSaida(rs.getString("tabelaSaida"));
 		}
 		conn.close();
 		return analise;
@@ -79,7 +76,6 @@ public class AnaliseDao {
 			analise.setId(rs.getInt("id"));
 			analise.setNomeScript(rs.getString("nomeScript"));
 			analise.setNomeAnalise(rs.getString("nomeAnalise"));
-			analise.setTabelaSaida(rs.getString("tabelaSaida"));
 			analises.add(analise);
 		}
 		conn.close();
