@@ -13,7 +13,7 @@
           </md-card-content>
 
           <md-card-actions>
-            <md-button@click="changePage(analise.nomeScript)">Action</md-button>
+            <md-button@click="changePage(analise.nomeScript)">Acessar</md-button>
           </md-card-actions>
         </md-card>
       </md-layout>
@@ -38,19 +38,19 @@
       return {
       img : {  encodedImage: []},
         msg: 'Welcome to Your Vue.js App',
-        analises: [{nome: 'Turnover', descricao: 'conceito frequentemente utilizado na área de Recursos Humanos (RH) para designar a rotatividade de pessoal em uma organização, ou seja, as entradas e saídas de funcionários em determinado período de tempo.'},
-                  {nome: 'Turnover', descricao: 'conceito frequentemente utilizado na área de Recursos Humanos (RH) para designar a rotatividade de pessoal em uma organização, ou seja, as entradas e saídas de funcionários em determinado período de tempo.'},
-                  {nome: 'Turnover', descricao: 'conceito frequentemente utilizado na área de Recursos Humanos (RH) para designar a rotatividade de pessoal em uma organização, ou seja, as entradas e saídas de funcionários em determinado período de tempo.'}],
+        analises: [],
         nAnalises: [1]
       }
     },
     methods: {
       init() {
+        var req  = {nomeAnalise:  this.$session.get('analises')}
 
         var that = this;
-        axios.post('http://localhost:8080/tcc-back/webapi/analise/get')
+        axios.post('http://localhost:8080/tcc-back/webapi/analise/getId',{
+          req
+        })
           .then(function (response) {
-            console.log(response);
             that.analises = response.data
           })
           .catch(function (error) {

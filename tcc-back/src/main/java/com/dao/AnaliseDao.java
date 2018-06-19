@@ -14,7 +14,7 @@ public class AnaliseDao {
 	private final static String TABLE = "Analise";
 
 	public static String createRecord(Connection conn, Analise analise) throws SQLException {
-		String query = "insert into " + TABLE + " (nomeAnalise, nomeScript)" + " values (?, ?)";
+		String query = "insert into " + TABLE + " (nomeAnalise, nomeScript, fk_empresa)" + " values (?, ?, ?)";
 
 		// create the mysql insert preparedstatement
 		PreparedStatement preparedStmt;
@@ -22,6 +22,7 @@ public class AnaliseDao {
 			preparedStmt = conn.prepareStatement(query);
 			preparedStmt.setString(1, analise.getNomeAnalise());
 			preparedStmt.setString(2, analise.getNomeScript());
+			preparedStmt.setString(3, analise.getFk_empresa());
 			preparedStmt.execute();
 			conn.close();
 			return "Inserido com sucesso";
@@ -43,7 +44,7 @@ public class AnaliseDao {
 		preparedStatement = conn.prepareStatement(updateTableSQL);
 		preparedStatement.setString(1, analise.getNomeAnalise());
 		preparedStatement.setString(2, analise.getNomeScript());
-		preparedStatement.setInt(4, analise.getId());
+		preparedStatement.setInt(3, analise.getId());
 
 		// execute update SQL stetement
 		preparedStatement.executeUpdate();
@@ -51,18 +52,22 @@ public class AnaliseDao {
 
 	}
 
-	public static Analise findRecordById(Connection conn, int id) throws SQLException {
-		Analise analise = new Analise();
-		String selectSQL = "SELECT * FROM " + TABLE + " WHERE id = ?";
+	public static List<Analise> findRecordById(Connection conn, String id) throws SQLException {
+		Analise analise;
+		List<Analise> analises = new ArrayList<>();
+		String selectSQL = "SELECT * FROM " + TABLE + " WHERE id in("+id+")";
 		PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
-		preparedStatement.setInt(1, id);
 		ResultSet rs = preparedStatement.executeQuery(selectSQL);
 		while (rs.next()) {
-			analise.setNomeAnalise(rs.getString("nomeAnalise"));
+			analise = new Analise();
+			analise.setId(rs.getInt("id"));
+			analise.setFk_empresa(rs.getString("fk_empresa"));
 			analise.setNomeScript(rs.getString("nomeScript"));
+			analise.setNomeAnalise(rs.getString("nomeAnalise"));
+			analises.add(analise);
 		}
 		conn.close();
-		return analise;
+		return analises;
 	}
 
 	public static List<Analise> getAll(Connection conn) throws SQLException {
@@ -74,6 +79,7 @@ public class AnaliseDao {
 		while (rs.next()) {
 			analise = new Analise();
 			analise.setId(rs.getInt("id"));
+			analise.setFk_empresa(rs.getString("fk_empresa"));
 			analise.setNomeScript(rs.getString("nomeScript"));
 			analise.setNomeAnalise(rs.getString("nomeAnalise"));
 			analises.add(analise);

@@ -29,7 +29,7 @@
       <md-button @click="criar" class="md-raised md-primary">Criar</md-button>
     </div>
   </md-tab>
-  <md-tab v-show="this.$route.path !== '/CriarUsuario/1'" id="editar" md-label="Editar">
+  <md-tab :md-disabled="this.$route.path === '/CriarUsuario/1'" id="editar" md-label="Editar">
     <div style="margin:3%">
       <h2>Editar dados pessoais</h2>
       <model-select :options="options2"
@@ -76,7 +76,7 @@ export default {
   },
   data() {
     return {
-      data:{usuario:'', cpf: '', email: '', fk_departamento: "", senha:""},
+      data:{usuario:'', cpf: '', email: '', fk_departamento: this.$session.get('id_departamento'), senha:""},
       options: [
       ],
       options2: [
@@ -97,10 +97,10 @@ export default {
       axios.post('http://localhost:8080/tcc-back/webapi/usuario/get',{
       })
       .then(function (response) {
-        console.log(JSON.stringify(response.data))
+        // console.log(JSON.stringify(response.data))
         var resp = JSON.stringify(response.data).replace(new RegExp("id\"", 'g'), 'value\"').replace(new RegExp("usuario", 'g'), 'text')
         self.options2 = JSON.parse(resp)
-        console.log(self.options)
+        // console.log(self.options)
 
       })
       .catch(function (error) {
@@ -109,7 +109,7 @@ export default {
       axios.post('http://localhost:8080/tcc-back/webapi/departamento/get',{
       })
       .then(function (response) {
-        console.log(JSON.stringify(response.data))
+        // console.log(JSON.stringify(response.data))
         var resp = JSON.stringify(response.data).replace(new RegExp("id\"", 'g'), 'value\"').replace(new RegExp("nome", 'g'), 'text')
         self.options = JSON.parse(resp)
 
@@ -122,8 +122,10 @@ export default {
     criar : function(){
       console.log('fazendo req')
       var req = this.data;
+        if(this.$route.path !== '/CriarUsuario/1')
+       req.fk_departamento = this.item.value
+
       var that = this;
-      req.fk_departamento = this.item.value
 
       console.log(req)
 

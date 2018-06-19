@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,24 +13,29 @@ import com.object.Empresa;
 public class EmpresaDao {
 	private final static String TABLE = "Empresa";
 
-	public static String createRecord(Connection conn, Empresa empresa) throws SQLException {
+	public static Empresa createRecord(Connection conn, Empresa empresa) throws SQLException {
 		String query = "insert into " + TABLE + " (nome, cnpj)" + " values (?, ?)";
 
 		// create the mysql insert preparedstatement
 		PreparedStatement preparedStmt;
 		try {
-			preparedStmt = conn.prepareStatement(query);
+			preparedStmt = conn.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 			preparedStmt.setString(1, empresa.getNome());
 			preparedStmt.setString(2, empresa.getCnpj());
 			preparedStmt.execute();
+			
+			ResultSet generatedKeys = preparedStmt.getGeneratedKeys();
+			if (generatedKeys.next()) {
+                empresa.setId(generatedKeys.getInt(1));
+            }
 			conn.close();
-			return "Inserido com sucesso";
+			return empresa;
 		} catch (SQLException e) {
 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			conn.close();
-			return "Falha ao inserir";
+			return null;
 
 		}
 

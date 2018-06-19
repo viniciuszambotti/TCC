@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Main from '@/components/Main'
+import home from '@/components/Main'
 import CriarEmpresa from '@/components/CriarEmpresa'
 import CriarAnalise from '@/components/CriarAnalise'
 import CriarUsuario from '@/components/CriarUsuario'
@@ -20,10 +20,10 @@ export default new Router({
     {
       path: '/Main',
       name: 'Main',
-      component: Main
+      component: home
     },
     {
-      path: '/CriarEmpresa',
+      path: '/CriarEmpresa/:ed',
       name: 'CriarEmpresa',
       component: CriarEmpresa
     },
@@ -33,7 +33,7 @@ export default new Router({
       component: CriarUsuario
     },
     {
-      path: '/CriarAnalise',
+      path: '/CriarAnalise/:ed',
       name: 'CriarAnalise',
       component: CriarAnalise
     },
@@ -43,7 +43,7 @@ export default new Router({
       component: Analise
     },
     {
-      path: '/CriarDepartamento',
+      path: '/CriarDepartamento/:ed',
       name: 'Departamento',
       component: Departamento
     }

@@ -8,6 +8,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import com.dao.DepartamentoDao;
+import com.dao.EmpresaDao;
 import com.database.DbConnection;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -24,8 +25,7 @@ public class DepartamentoWs {
 	    	Departamento obj = mapper.readValue(util.formataReq(req), Departamento.class);
 	    	Connection conn = DbConnection.Conectar();
 	    	DepartamentoDao.createRecord(conn, obj);
-
-	       return "ok";
+	    	 return mapper.writeValueAsString(DepartamentoDao.createRecord(conn, obj));
 	    }
 	    
 	    @POST

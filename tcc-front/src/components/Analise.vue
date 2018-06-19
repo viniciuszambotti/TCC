@@ -5,7 +5,7 @@
       <meta charset="UTF-8">
     </head>
     <md-tabs>
-      <md-tab id="selectAnalise" md-label="Configurar visualização">
+      <md-tab id="selectAnalise" md-label="Visualização">
         <md-button class="md-raised md-primary" @click="attAnalise(nomeAnalise)">Atualizar Análise</md-button>
         <br><br>
         <md-boards class="md-primary" :md-controls="true">

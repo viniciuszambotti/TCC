@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,25 +13,28 @@ import com.object.Departamento;
 public class DepartamentoDao {
 	private final static String TABLE = "Departamento";
 
-	public static String createRecord(Connection conn, Departamento departamento) throws SQLException {
+	public static Departamento createRecord(Connection conn, Departamento departamento) throws SQLException {
 		String query = "insert into " + TABLE + " (nome, fk_empresa, analises)" + " values (?, ?, ?)";
 
 		// create the mysql insert preparedstatement
 		PreparedStatement preparedStmt;
 		try {
-			preparedStmt = conn.prepareStatement(query);
+			preparedStmt = conn.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 			preparedStmt.setString(1, departamento.getNome());
 			preparedStmt.setInt(2, departamento.getFk_empresa());
 			preparedStmt.setString(3, departamento.getAnalises());
 			preparedStmt.execute();
-			conn.close();
-			return "Inserido com sucesso";
+			ResultSet generatedKeys = preparedStmt.getGeneratedKeys();
+			if (generatedKeys.next()) {
+                departamento.setId(generatedKeys.getInt(1));
+            }
+			return departamento;
 		} catch (SQLException e) {
 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			conn.close();
-			return "Falha ao inserir";
+			return null;
 
 		}
 
@@ -54,9 +58,8 @@ public class DepartamentoDao {
 
 	public static Departamento findRecordById(Connection conn, int id) throws SQLException {
 		Departamento departamento = new Departamento();
-		String selectSQL = "SELECT * FROM " + TABLE + " WHERE id = ?";
+		String selectSQL = "SELECT * FROM " + TABLE + " WHERE id = " + id;
 		PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
-		preparedStatement.setInt(1, id);
 		ResultSet rs = preparedStatement.executeQuery(selectSQL);
 		while (rs.next()) {
 			departamento.setNome(rs.getString("nome"));

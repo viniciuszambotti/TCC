@@ -5,14 +5,14 @@ public class Analise {
 	private int id;	
 	private String nomeAnalise;
 	private String nomeScript;
-	private String fk_departamento;
+	private String fk_empresa;
 	
 	
-	public String getFk_departamento() {
-		return fk_departamento;
+	public String getFk_empresa() {
+		return fk_empresa;
 	}
-	public void setFk_departamento(String fk_departamento) {
-		this.fk_departamento = fk_departamento;
+	public void setFk_empresa(String fk_empresa) {
+		this.fk_empresa = fk_empresa;
 	}
 	public int getId() {
 		return id;

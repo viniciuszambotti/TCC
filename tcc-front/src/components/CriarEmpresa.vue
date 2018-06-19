@@ -1,6 +1,6 @@
 <template>
   <md-tabs>
-    <md-tab id="criar" md-label="Criar">
+    <md-tab  :md-disabled="this.$route.path !== '/CriarEmpresa/1'" id="criar" md-label="Criar">
       <div style="margin:3%" >
         <h2>Cadastrar nova empresa</h2>
         <md-input-container>
@@ -14,7 +14,7 @@
         <md-button @click="criar" class="md-raised md-primary">Criar</md-button>
       </div>
     </md-tab>
-    <md-tab id="editar" md-label="Editar">
+    <md-tab :md-disabled="this.$route.path === '/CriarEmpresa/1'" id="editar" md-label="Editar">
       <div style="margin:3%" >
 
         <h2>Editar empresa</h2>
@@ -39,6 +39,7 @@
 
 <script>
 import axios from 'axios';
+import router from 'vue-router';
 import { ModelSelect } from 'vue-search-select'
 export default {
   name: 'criarEmpresa',
@@ -47,6 +48,7 @@ export default {
   },
   data() {
     return {
+      ed: false,
       data:{nome:'', cnpj:''},
       options:[],
       item: {
@@ -73,11 +75,15 @@ export default {
     criar : function(){
       console.log('fazendo req')
       var req = this.data
+      var that = this
       axios.post('http://localhost:8080/tcc-back/webapi/empresa/criar',{
         req
       })
       .then(function (response) {
-        console.log(response);
+        that.$session.start()
+        that.$session.set('id_empresa', response.data.id);
+        that.$router.push("/CriarAnalise/1")
+
       })
       .catch(function (error) {
         console.log(error);

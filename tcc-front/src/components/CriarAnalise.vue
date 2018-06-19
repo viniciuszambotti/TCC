@@ -13,12 +13,12 @@
         </md-input-container>
         <md-input-container>
           <label>Upload script (.py ou .r)</label>
-          <md-file v-model="single"></md-file>
+          <md-file v-model="file"></md-file>
         </md-input-container>
         <md-button @click="criar" class="md-raised md-primary">Criar</md-button>
       </div>
     </md-tab>
-    <md-tab id="editar" md-label="Editar">
+    <md-tab :md-disabled="this.$route.path === '/CriarAnalise/1'" id="editar" md-label="Editar">
       <div style="margin:3%">
         <h2>Editar analises</h2>
         <!-- object value -->
@@ -36,7 +36,6 @@
       </md-input-container>
       <md-button @click="editar" class="md-raised md-primary">Editar</md-button>
         <md-button @click="deletar" class="md-raised md-primary">Deletar</md-button>
-
     </div>
   </md-tab>
 </md-tabs>
@@ -53,7 +52,8 @@ export default {
   data() {
     return {
       single:{},
-      data:{nomeAnalise:'', nomeScript: ''},
+      file:'',
+      data:{nomeAnalise:'', nomeScript: '', fk_empresa: this.$session.get('id_empresa')},
       editarAnalise:{},
       options: [
       ],
@@ -83,10 +83,13 @@ export default {
     criar : function(){
       console.log('fazendo req')
       var req = this.data
+      var that = this;
       axios.post('http://localhost:8080/tcc-back/webapi/analise/criar',{
         req
       })
       .then(function (response) {
+        if(that.$route.path === '/CriarAnalise/1')
+        that.$router.push("/CriarDepartamento/1")
         console.log(response);
       })
       .catch(function (error) {

@@ -12,7 +12,7 @@
 
   <md-button @click="criar" class="md-raised md-primary">Login</md-button>
   <br>
-  <md-button @click="changePage('/CriarUsuario')" class="md-raised md-primary">Cadastrar novo usuário</md-button>
+  <md-button @click="changePage('/CriarEmpresa/1')" class="md-raised md-primary">Cadastrar novo usuário</md-button>
 </div>
 </template>
 
@@ -40,13 +40,27 @@ export default {
         that.$session.set('email',response.data.email);
         that.$session.set('fk_departamento',response.data.fk_departamento);
         that.$session.set('usuario',response.data.usuario);
+        var re2 = {id:response.data.fk_departamento}
+        axios.post('http://localhost:8080/tcc-back/webapi/departamento/getById',{
+          re2
+        })
+        .then(function (response) {
+          that.$session.set('analises',response.data.analises);
 
-        if(response.data.usuario !== undefined)
-        that.$router.push("/Main")
+          if(response.data.analises !== undefined)
+          that.$router.push("/Main")
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
       })
       .catch(function (error) {
         console.log(error);
       });
+
+
+
 
       this.$session.set('enable',true)
     },

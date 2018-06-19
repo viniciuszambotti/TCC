@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
-    <md-toolbar v-show="this.$route.path !== '/' && this.$route.path !== '/CriarUsuario/1'">
+    <md-toolbar v-show="this.$route.path !== '/'&& this.$route.path !== '/CriarAnalise/1'  && this.$route.path !== '/CriarEmpresa/1' && this.$route.path !== '/CriarDepartamento/1'">
       <md-button class="md-icon-button" @click="toggleLeftSidenav">
         <md-icon>menu</md-icon>
       </md-button>
@@ -24,25 +24,25 @@
           </md-button>
         </md-list-item>
         <md-list-item>
-          <md-button v-on:click="changePage('/CriarAnalise')" class=" md-list-action">
+          <md-button v-on:click="changePage('/CriarAnalise/2')" class=" md-list-action">
             <md-icon>insert_chart</md-icon>
             Criar/editar analise
           </md-button>
         </md-list-item>
         <md-list-item>
-          <md-button v-on:click="changePage('/CriarEmpresa')" class=" md-list-action">
+          <md-button v-on:click="changePage('/CriarEmpresa/2')" class=" md-list-action">
             <md-icon>business_center</md-icon>
             Criar nova empresa
           </md-button>
         </md-list-item>
         <md-list-item>
-          <md-button v-on:click="changePage('/CriarDepartamento')" class=" md-list-action">
+          <md-button v-on:click="changePage('/CriarDepartamento/2')" class=" md-list-action">
             <md-icon>business_center</md-icon>
             Criar novo departamento
           </md-button>
         </md-list-item>
         <md-list-item>
-          <md-button v-on:click="changePage('/CriarUsuario')" class=" md-list-action">
+          <md-button v-on:click="changePage('/CriarUsuario/2')" class=" md-list-action">
             <md-icon>person</md-icon>
             Criar/editar Usuario
           </md-button>

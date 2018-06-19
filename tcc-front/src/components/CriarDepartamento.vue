@@ -12,12 +12,10 @@
         <label>Nome do departamento</label>
         <md-input v-model="data.nome" maxlength="30"></md-input>
       </md-input-container>
-
-
       <md-button @click="criar" class="md-raised md-primary">Criar</md-button>
     </div>
   </md-tab>
-  <md-tab id="editar" md-label="Editar">
+  <md-tab  :md-disabled="this.$route.path === '/CriarDepartamento/1'" id="editar" md-label="Editar">
     <div style="margin:3%">
       <h2>Editar departamentos</h2>
       <!-- object value -->
@@ -25,6 +23,12 @@
       v-model="item"
       placeholder="Selecione o departamento">
     </model-select>
+<br>
+    <multi-select :options="optionsAna"
+    :selected-options="data.analises"
+    placeholder="Selecione as analises"
+    @select="onSelect">
+  </multi-select>
     <md-input-container>
       <label>Nome do departamento</label>
       <md-input v-model="item.text" maxlength="30"></md-input>
@@ -40,6 +44,7 @@
 
 <script>
 import axios from 'axios';
+import router from 'vue-router';
 import { ModelSelect, MultiSelect  } from 'vue-search-select'
 export default {
   name: 'criarAnalise',
@@ -50,7 +55,7 @@ export default {
   data() {
     return {
       single:{},
-      data:{nome:'', fk_empresa: '', analises: []},
+      data:{nome:'', fk_empresa: this.$session.get('id_empresa'), analises: []},
       options: [
       ],
       item: {
@@ -98,6 +103,7 @@ export default {
     criar : function(){
       console.log('fazendo req')
       var req = this.data;
+      var that = this;
       var ids= ''
       req.analises.map(function(value, key) {
         ids = ids + value.value +',';
@@ -110,6 +116,13 @@ export default {
       })
       .then(function (response) {
         console.log(response);
+        if(response.data.id !== 0 ){
+          if(this.$route.path === '/CriarDepartamento/1'){
+        that.$session.set('id_departamento', response.data.id);
+
+        that.$router.push("/CriarUsuario/1")
+      }
+      }
       })
       .catch(function (error) {
         console.log(error);

@@ -25,9 +25,8 @@ public class EmpresaWs {
     	ObjectMapper mapper = new ObjectMapper();
     	Empresa obj = mapper.readValue(util.formataReq(req), Empresa.class);
     	Connection conn = DbConnection.Conectar();
-    	EmpresaDao.createRecord(conn, obj);
+    	 return mapper.writeValueAsString(EmpresaDao.createRecord(conn, obj));
 
-       return "ok";
     }
     
     @POST

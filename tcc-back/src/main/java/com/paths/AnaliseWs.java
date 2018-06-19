@@ -38,6 +38,17 @@ public class AnaliseWs {
 
 	       return mapper.writeValueAsString(AnaliseDao.getAll(conn));
 	    }
+	    
+	    @POST
+	    @Path("getId")
+	    public String getId(String req) throws ClassNotFoundException, SQLException, JsonParseException, JsonMappingException, IOException {
+	    	ObjectMapper mapper = new ObjectMapper();
+	    	Connection conn = DbConnection.Conectar();
+	    	Analise obj = mapper.readValue(util.formataReq(req), Analise.class);
+	    	
+
+	       return mapper.writeValueAsString(AnaliseDao.findRecordById(conn, obj.getNomeAnalise()));
+	    }
 
 	    @POST
 	    @Path("editar")
