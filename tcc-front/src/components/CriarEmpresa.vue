@@ -1,5 +1,8 @@
 <template>
   <md-tabs>
+    <md-snackbar :md-position="'top' + ' ' + 'center'" ref="snackbar" :md-duration="duration">
+      <span>{{msg}}</span>
+    </md-snackbar>
     <md-tab  :md-disabled="this.$route.path !== '/CriarEmpresa/1'" id="criar" md-label="Criar">
       <div style="margin:3%" >
         <h2>Cadastrar nova empresa</h2>
@@ -22,19 +25,19 @@
         v-model="item"
         placeholder="Selecione a empresa">
       </model-select>
-        <md-input-container>
-          <label>Nome da empresa</label>
-          <md-input v-model="item.text" maxlength="30"></md-input>
-        </md-input-container>
-        <md-input-container>
-          <label>CNPJ da empresa</label>
-          <md-input v-model="item.cnpj" maxlength="30"></md-input>
-        </md-input-container>
-        <md-button @click="editar" class="md-raised md-primary">Editar</md-button>
-          <md-button @click="deletar" class="md-raised md-primary">Deletar</md-button>
-      </div>
-    </md-tab>
-  </md-tabs>
+      <md-input-container>
+        <label>Nome da empresa</label>
+        <md-input v-model="item.text" maxlength="30"></md-input>
+      </md-input-container>
+      <md-input-container>
+        <label>CNPJ da empresa</label>
+        <md-input v-model="item.cnpj" maxlength="30"></md-input>
+      </md-input-container>
+      <md-button @click="editar" class="md-raised md-primary">Editar</md-button>
+      <md-button @click="deletar" class="md-raised md-primary">Deletar</md-button>
+    </div>
+  </md-tab>
+</md-tabs>
 </template>
 
 <script>
@@ -51,6 +54,8 @@ export default {
       ed: false,
       data:{nome:'', cnpj:''},
       options:[],
+      msg : '',
+      duration: 3000,
       item: {
         value: '',
         text: ''
@@ -60,7 +65,9 @@ export default {
   methods: {
     init: function () {
       var self = this
+      var req = {id: this.$session.get('id_empresa')}
       axios.post('http://localhost:8080/tcc-back/webapi/empresa/get',{
+        req
       })
       .then(function (response) {
         var resp = JSON.stringify(response.data).replace(new RegExp("id", 'g'), 'value').replace(new RegExp("nome", 'g'), 'text')
@@ -72,6 +79,12 @@ export default {
       });
 
     },
+    open() {
+      this.$refs.snackbar.open();
+    },
+    close() {
+      this.$refs.snackbar.close();
+    },
     criar : function(){
       console.log('fazendo req')
       var req = this.data
@@ -80,6 +93,8 @@ export default {
         req
       })
       .then(function (response) {
+        that.msg = "Empresa criada"
+        that.open()
         that.$session.start()
         that.$session.set('id_empresa', response.data.id);
         that.$router.push("/CriarAnalise/1")
@@ -88,47 +103,53 @@ export default {
       .catch(function (error) {
         console.log(error);
       });
-  },
-  editar : function(){
-    console.log('fazendo req')
-    var req = {
-      id: this.item.value,
-      nome: this.item.text,
-      cnpj: this.item.cnpj
+    },
+    editar : function(){
+      var that = this
+      console.log('fazendo req')
+      var req = {
+        id: this.item.value,
+        nome: this.item.text,
+        cnpj: this.item.cnpj
+      }
+      axios.post('http://localhost:8080/tcc-back/webapi/empresa/editar',{
+        req
+      })
+      .then(function (response) {
+        that.msg = "Empresa editada"
+        that.open()
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    deletar : function(){
+      var self = this
+      var that = this
+      console.log('fazendo req')
+      var req = {
+        id: this.item.value,
+        nome: this.item.text,
+        cnpj: this.item.cnpj
+      }
+      axios.post('http://localhost:8080/tcc-back/webapi/empresa/deletar',{
+        req
+      })
+      .then(function (response) {
+        that.msg = "Empresa deletada"
+        that.open()
+        self.init();
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
-    axios.post('http://localhost:8080/tcc-back/webapi/empresa/editar',{
-      req
-    })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-},
-deletar : function(){
-  var self = this
-  console.log('fazendo req')
-  var req = {
-    id: this.item.value,
-    nome: this.item.text,
-    cnpj: this.item.cnpj
+  },
+  beforeMount(){
+    this.init()
   }
-  axios.post('http://localhost:8080/tcc-back/webapi/empresa/deletar',{
-    req
-  })
-  .then(function (response) {
-    self.init();
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-}
-},
-beforeMount(){
-   this.init()
-}
 }
 </script>
 

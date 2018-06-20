@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <head>
       <meta charset="UTF-8">
     </head>
@@ -55,7 +54,7 @@ export default {
       this.$refs.snackbar.close();
     },
     attAnalise: function(name){
-      this.msg = "Atualizando Analise..."
+      this.msg = "Atualizando Analise"
       this.open()
       var that = this;
       axios.get('http://localhost:5000/user/' + name)

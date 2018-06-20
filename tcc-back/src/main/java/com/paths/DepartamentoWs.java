@@ -24,18 +24,18 @@ public class DepartamentoWs {
 	    	ObjectMapper mapper = new ObjectMapper();
 	    	Departamento obj = mapper.readValue(util.formataReq(req), Departamento.class);
 	    	Connection conn = DbConnection.Conectar();
-	    	DepartamentoDao.createRecord(conn, obj);
 	    	 return mapper.writeValueAsString(DepartamentoDao.createRecord(conn, obj));
 	    }
 	    
 	    @POST
-	    @Path("get")
-	    public String getIt() throws ClassNotFoundException, SQLException, JsonParseException, JsonMappingException, IOException {
+	    @Path("getEmpresa")
+	    public String getEmpresa(String req) throws ClassNotFoundException, SQLException, JsonParseException, JsonMappingException, IOException {
 	    	ObjectMapper mapper = new ObjectMapper();
 	    	Connection conn = DbConnection.Conectar();
+	    	Departamento obj = mapper.readValue(util.formataReq(req), Departamento.class);
 	    	
 
-	       return mapper.writeValueAsString(DepartamentoDao.getAll(conn));
+	       return mapper.writeValueAsString(DepartamentoDao.getAll(conn, obj.getFk_empresa()));
 	    }
 
 	    @POST

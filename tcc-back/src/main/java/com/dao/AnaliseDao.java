@@ -70,10 +70,10 @@ public class AnaliseDao {
 		return analises;
 	}
 
-	public static List<Analise> getAll(Connection conn) throws SQLException {
+	public static List<Analise> getAll(Connection conn, String idEmpresa) throws SQLException {
 		Analise analise;
 		List<Analise> analises = new ArrayList<>();
-		String selectSQL = "SELECT * FROM " + TABLE;
+		String selectSQL = "SELECT * FROM " + TABLE + " where fk_empresa=" + idEmpresa;
 		PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
 		ResultSet rs = preparedStatement.executeQuery(selectSQL);
 		while (rs.next()) {

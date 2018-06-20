@@ -1,5 +1,8 @@
 <template>
   <md-tabs>
+    <md-snackbar :md-position="'top' + ' ' + 'center'" ref="snackbar" :md-duration="duration">
+      <span>{{msg}}</span>
+    </md-snackbar>
     <md-tab id="criar" md-label="Criar">
       <div style="margin:3%">
         <h2>Cadastrar nova análise</h2>
@@ -35,7 +38,7 @@
         <md-input v-model="item.nomeScript" maxlength="30"></md-input>
       </md-input-container>
       <md-button @click="editar" class="md-raised md-primary">Editar</md-button>
-        <md-button @click="deletar" class="md-raised md-primary">Deletar</md-button>
+      <md-button @click="deletar" class="md-raised md-primary">Deletar</md-button>
     </div>
   </md-tab>
 </md-tabs>
@@ -52,6 +55,8 @@ export default {
   data() {
     return {
       single:{},
+      msg : '',
+      duration: 3000,
       file:'',
       data:{nomeAnalise:'', nomeScript: '', fk_empresa: this.$session.get('id_empresa')},
       editarAnalise:{},
@@ -66,7 +71,9 @@ export default {
   methods: {
     init: function () {
       var self = this
-      axios.post('http://localhost:8080/tcc-back/webapi/analise/get',{
+      var req = this.data
+      axios.post('http://localhost:8080/tcc-back/webapi/analise/getEmpresa',{
+        req
       })
       .then(function (response) {
         console.log(JSON.stringify(response.data))
@@ -80,6 +87,12 @@ export default {
       });
 
     },
+    open() {
+      this.$refs.snackbar.open();
+    },
+    close() {
+      this.$refs.snackbar.close();
+    },
     criar : function(){
       console.log('fazendo req')
       var req = this.data
@@ -88,6 +101,9 @@ export default {
         req
       })
       .then(function (response) {
+
+        that.msg = "Análise criada"
+        that.open()
         if(that.$route.path === '/CriarAnalise/1')
         that.$router.push("/CriarDepartamento/1")
         console.log(response);
@@ -95,47 +111,52 @@ export default {
       .catch(function (error) {
         console.log(error);
       });
-  },
-  editar : function(){
-    console.log('fazendo req')
-    var req = {
-      id: this.item.value,
-      nomeAnalise: this.item.text,
-      nomeScript: this.item.nomeScript
+    },
+    editar : function(){
+      var that = this
+      console.log('fazendo req')
+      var req = {
+        id: this.item.value,
+        nomeAnalise: this.item.text,
+        nomeScript: this.item.nomeScript
+      }
+      axios.post('http://localhost:8080/tcc-back/webapi/analise/editar',{
+        req
+      })
+      .then(function (response) {
+        that.msg = "Análise editada"
+        that.open()
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    deletar : function(){
+      var self = this
+      console.log('fazendo req')
+      var req = {
+        id: this.item.value,
+        nomeAnalise: this.item.text,
+        nomeScript: this.item.nomeScript
+      }
+      axios.post('http://localhost:8080/tcc-back/webapi/analise/deletar',{
+        req
+      })
+      .then(function (response) {
+        self.msg = "Análise Deletada"
+        self.open()
+        self.init();
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
-    axios.post('http://localhost:8080/tcc-back/webapi/analise/editar',{
-      req
-    })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-},
-deletar : function(){
-  var self = this
-  console.log('fazendo req')
-  var req = {
-    id: this.item.value,
-    nomeAnalise: this.item.text,
-    nomeScript: this.item.nomeScript
+  },
+  beforeMount(){
+    this.init()
   }
-  axios.post('http://localhost:8080/tcc-back/webapi/analise/deletar',{
-    req
-  })
-  .then(function (response) {
-    self.init();
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-}
-},
-beforeMount(){
-   this.init()
-}
 }
 </script>
 

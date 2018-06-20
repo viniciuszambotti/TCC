@@ -70,10 +70,10 @@ public class DepartamentoDao {
 		return departamento;
 	}
 
-	public static List<Departamento> getAll(Connection conn) throws SQLException {
+	public static List<Departamento> getAll(Connection conn, int id) throws SQLException {
 		Departamento departamento;
 		List<Departamento> departamentos = new ArrayList<>();
-		String selectSQL = "SELECT * FROM " + TABLE;
+		String selectSQL = "SELECT * FROM " + TABLE + " where fk_empresa = " + id;
 		PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
 		ResultSet rs = preparedStatement.executeQuery(selectSQL);
 		while (rs.next()) {

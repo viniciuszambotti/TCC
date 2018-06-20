@@ -43,7 +43,7 @@ public class UserDao {
 	public static void updateRecord(Connection conn, User user) throws SQLException {
 		PreparedStatement preparedStatement = null;
 
-		String updateTableSQL = "UPDATE " + TABLE + " SET usuario = ?,senha = ?, email= ?, tipo= ?, cpf= ?, fk_departamento= ? " + " WHERE id = ?";
+		String updateTableSQL = "UPDATE " + TABLE + " SET usuario = ?,senha = ?, email= ?, tipo= ?, cpf= ?, fk_departamento= ? " + " WHERE id =" + user.getId();
 		preparedStatement = conn.prepareStatement(updateTableSQL);
 		preparedStatement.setString(1, user.getUsuario());
 		preparedStatement.setString(2, user.getSenha());
@@ -51,7 +51,6 @@ public class UserDao {
 		preparedStatement.setString(4, user.getTipo());
 		preparedStatement.setString(5, user.getCpf());
 		preparedStatement.setInt(6, user.getFk_departamento());
-		preparedStatement.setInt(7, user.getId());
 
 		// execute update SQL stetement
 		preparedStatement.executeUpdate();

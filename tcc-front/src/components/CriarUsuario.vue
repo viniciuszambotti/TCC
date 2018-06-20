@@ -1,5 +1,8 @@
 <template>
   <md-tabs>
+    <md-snackbar :md-position="'top' + ' ' + 'center'" ref="snackbar" :md-duration="duration">
+      <span>{{msg}}</span>
+    </md-snackbar>
     <md-tab id="criar" md-label="Criar">
       <div style="margin:3%">
         <h2>Cadastrar novo usuário</h2>
@@ -36,31 +39,31 @@
       v-model="item2"
       placeholder="Selecione o usuario">
     </model-select>
-      <md-input-container>
-        <label>Nome</label>
-        <md-input v-model="item2.text" maxlength="30"></md-input>
-      </md-input-container>
-      <md-input-container>
-        <model-select :options="options"
-        v-model="item"
-        placeholder="Departamento">
-      </model-select>
+    <md-input-container>
+      <label>Nome</label>
+      <md-input v-model="item2.text" maxlength="30"></md-input>
     </md-input-container>
     <md-input-container>
-      <label>CPF</label>
-      <md-input v-model="item2.cpf" maxlength="30"></md-input>
-    </md-input-container>
-    <md-input-container>
-      <label>Email</label>
-      <md-input v-model="item2.email" maxlength="30"></md-input>
-    </md-input-container>
-    <md-input-container>
-      <label>Senha</label>
-      <md-input  type="password" v-model="item2.senha" maxlength="30"></md-input>
-    </md-input-container>
-    <md-button @click="editar" class="md-raised md-primary">Editar</md-button>
-    <md-button @click="deletar" class="md-raised md-primary">Deletar</md-button>
-  </div>
+      <model-select :options="options"
+      v-model="item"
+      placeholder="Departamento">
+    </model-select>
+  </md-input-container>
+  <md-input-container>
+    <label>CPF</label>
+    <md-input v-model="item2.cpf" maxlength="30"></md-input>
+  </md-input-container>
+  <md-input-container>
+    <label>Email</label>
+    <md-input v-model="item2.email" maxlength="30"></md-input>
+  </md-input-container>
+  <md-input-container>
+    <label>Senha</label>
+    <md-input  type="password" v-model="item2.senha" maxlength="30"></md-input>
+  </md-input-container>
+  <md-button @click="editar" class="md-raised md-primary">Editar</md-button>
+  <md-button @click="deletar" class="md-raised md-primary">Deletar</md-button>
+</div>
 </md-tab>
 </md-tabs>
 </template>
@@ -76,6 +79,8 @@ export default {
   },
   data() {
     return {
+      msg : '',
+      duration: 3000,
       data:{usuario:'', cpf: '', email: '', fk_departamento: this.$session.get('id_departamento'), senha:""},
       options: [
       ],
@@ -106,7 +111,9 @@ export default {
       .catch(function (error) {
         console.log(error);
       });
-      axios.post('http://localhost:8080/tcc-back/webapi/departamento/get',{
+      var req = {fk_empresa: this.$session.get('id_empresa')}
+      axios.post('http://localhost:8080/tcc-back/webapi/departamento/getEmpresa',{
+        req
       })
       .then(function (response) {
         // console.log(JSON.stringify(response.data))
@@ -119,11 +126,21 @@ export default {
       });
 
     },
+    open() {
+      this.$refs.snackbar.open();
+    },
+    close() {
+      this.$refs.snackbar.close();
+    },
     criar : function(){
       console.log('fazendo req')
       var req = this.data;
-        if(this.$route.path !== '/CriarUsuario/1')
-       req.fk_departamento = this.item.value
+      if(this.$route.path !== '/CriarUsuario/1'){
+        req.fk_departamento = this.item.value
+        req.tipo = 1
+      }else{
+        req.tipo = 2
+      }
 
       var that = this;
 
@@ -133,9 +150,11 @@ export default {
         req
       })
       .then(function (response) {
+        that.msg = "Usuário criado"
+        that.open()
         console.log(response);
         if(that.$route.path === '/CriarUsuario/1')
-          that.$router.push('/');
+        that.$router.push('/');
       })
       .catch(function (error) {
         console.log(error);
@@ -143,6 +162,7 @@ export default {
     },
     editar : function(){
       console.log('fazendo req')
+      var that = this
       var req = {
         id: this.item2.value,
         usuario: this.item2.text,
@@ -155,6 +175,8 @@ export default {
         req
       })
       .then(function (response) {
+        that.msg = "Usuário editado"
+        that.open()
         console.log(response);
       })
       .catch(function (error) {
@@ -163,6 +185,7 @@ export default {
     },
     deletar : function(){
       var self = this
+      var that = this
       console.log('fazendo req')
       var req = {
         id: this.item2.value,
@@ -172,6 +195,8 @@ export default {
         req
       })
       .then(function (response) {
+        that.msg = "Usuário excluído"
+        that.open()
         self.init();
         console.log(response);
       })

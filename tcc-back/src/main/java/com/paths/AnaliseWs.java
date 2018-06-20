@@ -30,13 +30,13 @@ public class AnaliseWs {
 	    }
 	    
 	    @POST
-	    @Path("get")
-	    public String getIt() throws ClassNotFoundException, SQLException, JsonParseException, JsonMappingException, IOException {
+	    @Path("getEmpresa")
+	    public String getIdEmpresa(String req) throws ClassNotFoundException, SQLException, JsonParseException, JsonMappingException, IOException {
 	    	ObjectMapper mapper = new ObjectMapper();
 	    	Connection conn = DbConnection.Conectar();
-	    	
+	    	Analise obj = mapper.readValue(util.formataReq(req), Analise.class);
 
-	       return mapper.writeValueAsString(AnaliseDao.getAll(conn));
+	       return mapper.writeValueAsString(AnaliseDao.getAll(conn, obj.getFk_empresa()));
 	    }
 	    
 	    @POST

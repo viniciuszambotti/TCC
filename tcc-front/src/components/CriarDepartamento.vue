@@ -1,5 +1,9 @@
 <template>
   <md-tabs>
+    <md-snackbar :md-position="'top' + ' ' + 'center'" ref="snackbar" :md-duration="duration">
+      <span>{{msg}}</span>
+    </md-snackbar>
+
     <md-tab id="criar" md-label="Criar">
       <div style="margin:3%">
         <h2>Cadastrar novo departamento</h2>
@@ -23,21 +27,21 @@
       v-model="item"
       placeholder="Selecione o departamento">
     </model-select>
-<br>
+    <br>
     <multi-select :options="optionsAna"
     :selected-options="data.analises"
     placeholder="Selecione as analises"
     @select="onSelect">
   </multi-select>
-    <md-input-container>
-      <label>Nome do departamento</label>
-      <md-input v-model="item.text" maxlength="30"></md-input>
-    </md-input-container>
+  <md-input-container>
+    <label>Nome do departamento</label>
+    <md-input v-model="item.text" maxlength="30"></md-input>
+  </md-input-container>
 
-    <md-button @click="editar" class="md-raised md-primary">Editar</md-button>
-    <md-button @click="deletar" class="md-raised md-primary">Deletar</md-button>
+  <md-button @click="editar" class="md-raised md-primary">Editar</md-button>
+  <md-button @click="deletar" class="md-raised md-primary">Deletar</md-button>
 
-  </div>
+</div>
 </md-tab>
 </md-tabs>
 </template>
@@ -54,6 +58,8 @@ export default {
   },
   data() {
     return {
+      msg : '',
+      duration: 3000,
       single:{},
       data:{nome:'', fk_empresa: this.$session.get('id_empresa'), analises: []},
       options: [
@@ -70,7 +76,9 @@ export default {
   methods: {
     init: function () {
       var self = this
-      axios.post('http://localhost:8080/tcc-back/webapi/departamento/get',{
+      var req = {fk_empresa: this.$session.get('id_empresa')}
+      axios.post('http://localhost:8080/tcc-back/webapi/departamento/getEmpresa',{
+        req
       })
       .then(function (response) {
         console.log(JSON.stringify(response.data))
@@ -82,9 +90,10 @@ export default {
       .catch(function (error) {
         console.log(error);
       });
-
+      req = {fk_empresa: this.$session.get('id_empresa')}
       //get analalises
-      axios.post('http://localhost:8080/tcc-back/webapi/analise/get',{
+      axios.post('http://localhost:8080/tcc-back/webapi/analise/getEmpresa',{
+        req
       })
       .then(function (response) {
         console.log(JSON.stringify(response.data))
@@ -100,6 +109,12 @@ export default {
     onSelect (items) {
       this.data.analises = items
     },
+    open() {
+      this.$refs.snackbar.open();
+    },
+    close() {
+      this.$refs.snackbar.close();
+    },
     criar : function(){
       console.log('fazendo req')
       var req = this.data;
@@ -110,19 +125,19 @@ export default {
       });
       req.analises = ids.substring(0, ids.length -1);
 
-      // req.analises = req.analises.toString();
       axios.post('http://localhost:8080/tcc-back/webapi/departamento/criar',{
         req
       })
       .then(function (response) {
+        that.msg = "Departamento criado"
+        that.open()
         console.log(response);
         if(response.data.id !== 0 ){
-          if(this.$route.path === '/CriarDepartamento/1'){
-        that.$session.set('id_departamento', response.data.id);
-
-        that.$router.push("/CriarUsuario/1")
-      }
-      }
+          if(that.$route.path === '/CriarDepartamento/1'){
+            that.$session.set('id_departamento', response.data.id);
+            that.$router.push("/CriarUsuario/1")
+          }
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -130,14 +145,28 @@ export default {
     },
     editar : function(){
       console.log('fazendo req')
+      var ids= ''
+      var that = this;
       var req = {
         id: this.item.value,
-        nome: this.item.text
+        nome: this.item.text,
+        analises: this.data.analises,
+        fk_empresa: this.$session.get('id_empresa')
       }
+
+      req.analises.map(function(value, key) {
+        ids = ids + value.value +',';
+      });
+      req.analises = ids.substring(0, ids.length -1);
+
       axios.post('http://localhost:8080/tcc-back/webapi/departamento/editar',{
         req
       })
       .then(function (response) {
+        that.msg = "Departamento editado"
+        that.open()
+
+        that.$session.set('analises',req.analises);
         console.log(response);
       })
       .catch(function (error) {
@@ -146,6 +175,7 @@ export default {
     },
     deletar : function(){
       var self = this
+      var that = this
       console.log('fazendo req')
       var req = {
         id: this.item.value,
@@ -155,6 +185,9 @@ export default {
         req
       })
       .then(function (response) {
+        that.msg = "Departamento deletado"
+        that.open()
+
         self.init();
         console.log(response);
       })

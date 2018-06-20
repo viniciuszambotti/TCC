@@ -70,10 +70,10 @@ public class EmpresaDao {
 		return empresa;
 	}
 
-	public static List<Empresa> getAll(Connection conn) throws SQLException {
+	public static List<Empresa> getAll(Connection conn, int id) throws SQLException {
 		Empresa empresa;
 		List<Empresa> empresas = new ArrayList<>();
-		String selectSQL = "SELECT * FROM " + TABLE;
+		String selectSQL = "SELECT * FROM " + TABLE + " where id = " + id;
 		PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
 		ResultSet rs = preparedStatement.executeQuery(selectSQL);
 		while (rs.next()) {

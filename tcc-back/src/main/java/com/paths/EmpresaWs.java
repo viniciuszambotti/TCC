@@ -31,12 +31,13 @@ public class EmpresaWs {
     
     @POST
     @Path("get")
-    public String getIt() throws ClassNotFoundException, SQLException, JsonParseException, JsonMappingException, IOException {
+    public String getId(String req) throws ClassNotFoundException, SQLException, JsonParseException, JsonMappingException, IOException {
     	ObjectMapper mapper = new ObjectMapper();
     	Connection conn = DbConnection.Conectar();
+    	Empresa obj = mapper.readValue(util.formataReq(req), Empresa.class);
     	
 
-       return mapper.writeValueAsString(EmpresaDao.getAll(conn));
+       return mapper.writeValueAsString(EmpresaDao.getAll(conn, obj.getId()));
     }
 
     @POST
